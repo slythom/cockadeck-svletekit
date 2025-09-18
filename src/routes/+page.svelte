@@ -1,2 +1,19 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
+</script>
+
+<form method="POST" action="?/get">
+	<div class="mx-auto flex w-full max-w-sm flex-col gap-3 p-10">
+		<Label for="quantity">quantity</Label>
+		<Input type="number" name="quantity" placeholder="quantity" />
+		<Label for="setcode">setcode</Label>
+		<Input type="text" name="setcode" placeholder="setcode" />
+		<Label for="collectornumber">collectornumber</Label>
+		<Input type="text" name="collectornumber" placeholder="collectornumber" />
+		<Label for="name">name</Label>
+		<Input type="text" name="name" placeholder="name" />
+		<Label for="image_uri">image_uri</Label>
+		<Input type="text" name="image_uri" placeholder="image_uri" />
+	</div>
+</form>
