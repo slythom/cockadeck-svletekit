@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
-    import { Button } from "$lib/components/ui/button/index.js";
+	import { Button } from '$lib/components/ui/button/index.js';
+	// import type { card } from '$lib/server/db/schema';
+	let { form } = $props();
 </script>
 
 <form method="POST" action="?/search">
@@ -16,9 +18,19 @@
 		<Input type="text" name="name" placeholder="name" />
 		<Label for="image_uri">image_uri</Label>
 		<Input type="text" name="image_uri" placeholder="image_uri" /> -->
-        <Button type="submit">Go!</Button>
+		<Button type="submit">Go!</Button>
 	</div>
 </form>
 <div>
-    <h1>Liste des cartes récupérées depuis l'API</h1>
+	<h1>Liste des cartes récupérées depuis l'API</h1>
+	{#if form?.success}
+		<ul>
+			<li>
+				// TODO: envelopper dans un form et appeler l'action save pour enregistrer dans DB
+				{form.card.name} - {form.quantity} - {form.card.set} - {form.card.collector_number}
+				<img src={form.card.image_uris.small} alt={form.card.name} />
+				<Button type="submit">save to db!</Button>
+			</li>
+		</ul>
+	{/if}
 </div>

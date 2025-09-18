@@ -20,7 +20,7 @@ export const actions = {
         }
 
         const card = await res.json();
-        return { success: true, card, quantity, name, image_uri };
+        return { success: true, card, quantity, setcode };
     },
 
     save: async ({ request }) => {
