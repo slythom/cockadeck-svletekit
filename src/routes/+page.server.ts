@@ -1,4 +1,7 @@
 import type { Actions } from './$types';
+import { db } from '$lib/server/db';
+import { card } from '$lib/server/db/schema';
+import type { PageServerLoad } from './$types';
 // TODO: typage / validation
 
 export const actions = {
@@ -8,8 +11,6 @@ export const actions = {
         const quantity = data.get('quantity');
         const setcode = data.get('setcode');
         const collectornumber = data.get('collectornumber');
-        const name = data.get('name');
-        const image_uri = data.get('image_uri');
 
         const api_url = `https://api.scryfall.com/cards/${setcode}/${collectornumber}`
         const res = await fetch(api_url)
@@ -20,10 +21,37 @@ export const actions = {
         }
 
         const card = await res.json();
+        if (!card) {
+           return { success: false, context: 'search', error: 'Scryfall 404' }
+        }
         return { success: true, card, quantity, setcode };
     },
 
     save: async ({ request }) => {
-        // TODO if the result is OK, the user click a button to save the card data (image, quantity...) into the SQLite DB
+        const data = await request.formData();
+
+        const name = String(data.get('name') ?? '');
+        const setcode = String(data.get('setcode') ?? '');
+        const collectornumber = String(data.get('collectornumber') ?? '');
+        const image_uri = String(data.get('image_uri') ?? '');
+        const quantity = Number(data.get('quantity') ?? '');
+
+        const saved = await db.insert(card).values({
+            name,
+            setcode,
+            collectornumber,
+            image_uri,
+            quantity
+        });
+
+        if (!saved) {
+            return {  success: false, context: 'save', error: "Fail to save" };
+        }
+
+        return {  success: true, context: 'save' };
     }
-} satisfies Actions;
+}
+export const load: PageServerLoad = async ({ params }) => {
+	const rows = await db.select().from(card); 
+    return { rows };
+};
