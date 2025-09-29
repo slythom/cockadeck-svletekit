@@ -22,7 +22,7 @@ export const actions = {
 
         const card = await res.json();
         if (!card) {
-           return { success: false, context: 'search', error: 'Scryfall 404' }
+            return { success: false, context: 'search', error: 'Scryfall 404' }
         }
         return { success: true, card, quantity, setcode };
     },
@@ -45,13 +45,30 @@ export const actions = {
         });
 
         if (!saved) {
-            return {  success: false, context: 'save', error: "Fail to save" };
+            return { success: false, context: 'save', error: "Fail to save" };
         }
 
-        return {  success: true, context: 'save' };
+        return { success: true, context: 'save' };
+    },
+
+    export: async ({ request }) => {
+        const savedcards = await db.select({
+            name: card.name,
+            quantity: card.quantity,
+        }).from(card).execute();
+        console.log(savedcards)
+
+        if (!savedcards) {
+            return { success: false, context: 'export', error: "Fail to fetch cards" };
+        }
+
+        return { success: true, context: 'export' };
     }
+    // TODO: add js to xml conversion and export file
+
+
 }
 export const load: PageServerLoad = async ({ params }) => {
-	const rows = await db.select().from(card); 
+    const rows = await db.select().from(card);
     return { rows };
 };
