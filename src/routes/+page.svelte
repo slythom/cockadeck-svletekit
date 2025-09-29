@@ -10,7 +10,7 @@
 </script>
 
 <form method="POST" action="?/search">
-	<div class="mx-auto flex w-full max-w-sm flex-col gap-3 p-10">
+	<div class="mx-auto flex w-full max-w-sm flex-col gap-3 p-10 shadow-lg">
 		<Label for="quantity">Quantity</Label>
 		<Input type="number" name="quantity" placeholder="quantity" />
 		<Label for="setcode">Set Code</Label>
@@ -49,9 +49,9 @@
 <h1 class="mb-4">My deck</h1>
 
 <div class="grid grid-cols-6">
-
-<Card.Root>
 	{#each data.rows as row}
+
+<Card.Root class="shadow-2xl border-none">
   <Card.Header>
     <Card.Title>{row.name}</Card.Title>
     <Card.Description>Quantity: {row.quantity}</Card.Description>
@@ -62,9 +62,13 @@
   <Card.Footer>
     <p class="text-xs">#{row.collectornumber} / {row.setcode}</p>
   </Card.Footer>
-  {/each}
 </Card.Root>
+  {/each}
 
+
+<form method="POST">
+  <button name="export" formaction="?/export">Exporter</button>
+</form>
 
 </div>
 </div>
